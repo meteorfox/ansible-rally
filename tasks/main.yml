@@ -1,0 +1,104 @@
+---
+# Copyright 2014, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Install apt packages
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+  sudo: True
+  with_items:
+    - wget
+    - python
+    - git
+    - bash-completion
+    - python-dev
+    - libffi-dev
+    - libxml2-dev
+    - libxslt1-dev
+    - libssl-dev
+    - libpq-dev
+    - python-virtualenv
+    - build-essential
+
+- name: Clone rally git repository
+  git:
+    repo: "{{ rally_git_repo }}"
+    dest: "{{ rally_git_dest }}"
+    version: "{{ rally_git_install_branch }}"
+  sudo: True
+
+- name: Install pip packages
+  pip:
+    name: "{{ item }}"
+    state: present
+    virtualenv: "{{ rally_venv_dir }}"
+    virtualenv_site_packages: yes
+  sudo: True
+  with_items:
+    - pip
+    - pbr
+    - tox<=1.6.1
+
+- name: Install rally
+  pip:
+    name: "file://{{ rally_git_dest }}"
+    state: present
+    virtualenv: "{{ rally_venv_dir }}"
+    virtualenv_site_packages: yes
+  sudo: True
+
+- name: Set up rally bash completion
+  sudo: True
+  lineinfile:
+    dest: "{{ rally_venv_dir }}/bin/activate"
+    line: ". {{ rally_venv_dir }}/etc/bash_completion.d/rally.bash_completion"
+    state: present
+
+- name: Create rally config directory
+  sudo: True
+  file:
+    path: "{{ rally_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Set the rally config file
+  sudo: True
+  template:
+    src: rally.conf.j2
+    dest: "{{ rally_conf_dir }}/rally.conf"
+    owner: root
+    group: root
+
+- name: Create rally database directory
+  sudo: True
+  file:
+    path: "{{ rally_database_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create rally database
+  sudo: True
+  shell: |
+    . {{ rally_venv_dir|quote }}/bin/activate
+    rally-manage db recreate
+  args:
+    executable: /bin/bash
+
