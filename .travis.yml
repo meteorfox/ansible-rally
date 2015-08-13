@@ -7,7 +7,7 @@ before_install:
 install:
   - pip install ansible==1.9.2
 script:
-  - echo localhost > tests/inventory
+  - echo localhost > inventory
   - ansible-playbook -i inventory tests/test.yml --syntax-check
   - ansible-playbook -i inventory tests/test.yml --connection=local --sudo
   - |
