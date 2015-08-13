@@ -1,4 +1,4 @@
-rally
+ansible-rally [![Build Status](https://travis-ci.org/meteorfox/ansible-rally.svg?branch=master)](https://travis-ci.org/meteorfox/ansible-rally)
 =========
 
 A brief description of the role goes here.
