@@ -93,6 +93,7 @@
     owner: root
     group: root
     mode: 0755
+  register: rally_db
 
 - name: Create rally database
   sudo: True
@@ -101,4 +102,5 @@
     rally-manage db recreate
   args:
     executable: /bin/bash
+  when: rally_db.changed
 
