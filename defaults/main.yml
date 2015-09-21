@@ -15,7 +15,8 @@
 
 # Git repository vars
 rally_git_repo: https://git.openstack.org/openstack/rally
-rally_git_install_branch: b399b05ce6c88cd414dfd98ba618ea5c46ea2a94
+rally_git_install_branch: 97a00ec7002fdbeea8471fea3e4e7ca132a99630
+#b399b05ce6c88cd414dfd98ba618ea5c46ea2a94
 rally_git_dest: "/opt/rally_{{ rally_git_install_branch | replace('/', '_') }}"
 
 # Rally virtualenv vars
