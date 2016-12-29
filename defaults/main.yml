@@ -14,8 +14,9 @@
 # limitations under the License.
 
 # Git repository vars
-rally_git_repo: https://git.openstack.org/openstack/rally
-rally_git_install_branch: 97a00ec7002fdbeea8471fea3e4e7ca132a99630
+rally_git_repo: https://github.com/openstack/rally
+rally_git_install_branch: edb093d9be82f1bd1cd853712c911ff20b2a02bf
+#97a00ec7002fdbeea8471fea3e4e7ca132a99630
 #b399b05ce6c88cd414dfd98ba618ea5c46ea2a94
 rally_git_dest: "/opt/rally_{{ rally_git_install_branch | replace('/', '_') }}"
 
